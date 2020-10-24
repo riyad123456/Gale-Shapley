@@ -59,31 +59,40 @@ public class MatchingClass{
         for(int i=2*n+1;i<tokens.size();i++){
           int y = 0;
           //replacing commas with spaces for easier traversal
-          String mystring = tokens.get(i).replace(","," ").replace(" ","");
+          String mystring = tokens.get(i).replace(","," ");
+          List<String> items = Arrays.asList(mystring.split(" "));
           HeapPriorityQueue<Integer,Integer> h = new HeapPriorityQueue<Integer,Integer>();
           //loop 6: filling up PQ by skipping the second  element of each pair since we don't need it
-          for(int x=0;x<n;x++){
-              int a=Character.getNumericValue(mystring.charAt(y++));
-              y++;
-              h.insert(a,x);
+          for(int x=0;x<items.size();x++){
+            if(x%2==0){
+              int a = Integer.parseInt(items.get(x));
+              h.insert(a,y++);
             }
+          }
             PQ.add(h);
         }
         A = new int[n][n];
         int v = 0;
         //loop 7: setting up the matrix A
+        //creating an ArrayList that contains all the List of each line of pairs
+        List<List<String>> itemsContainer = new ArrayList<>();
         for(int i=2*n+1;i<tokens.size();i++){
           int y = 0;
-          String mystring = tokens.get(i).replace(","," ").replace(" ","");
-          int[] sublist = new int[n];
-          //loop 6: filling up A by skipping the first element of each pair since we don't need it
-          for(int x=0;x<n;x++){
-              y++;
-              int a=Character.getNumericValue(mystring.charAt(y++));
-              sublist[x] = a;
-            }
-            A[v]=sublist;
-            v++;
+          String mystring = tokens.get(i).replace(","," ");
+          List<String> items = Arrays.asList(mystring.split(" "));
+          itemsContainer.add(items);
+        }
+        //traversing items container
+        //skipping first element since we don't need import junit.framework.TestCase;
+        //traversing itemsContainer vertically
+        for(int y=1;y<2*N;y+=2){
+          int count = 0;
+          int[] sublist = new int[N];
+          for(List<String> list:itemsContainer){
+            int number = Integer.parseInt(list.get(y));
+            sublist[count++]=number;
+          }
+          A[v++]=sublist;
         }
       }
       public static HashMap<Integer, Integer> execute()throws IOException{
